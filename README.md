@@ -23,9 +23,9 @@
 
 ## Business Goals
 
-- Predict the value of single unit properties duirng May - August, 2017
-- Identify states and counties of the properties and the distribution of tax rates
-- Presentation about findings to Zillow Data Science Team 
+- Use clustering methods in order to create a model to predict error in the Zillow data
+- Erros shown as logerror in the zillow data and is defined as: log(zestimate0 - log(salesprice) = logerror
+- Presentation notebook about findings to Zillow Data Science Team 
 
 ## Deliverables
 
@@ -126,3 +126,9 @@
 - Make a copy of my acquire and prepare files to use the functions within the files.
 
 - Make a copy of my final notebook, run each cell, and adjust any parameters as desired.
+
+## Trello Board
+
+- Use the link below to view my trello board for this project
+
+https://trello.com/b/o4gAnjQq
