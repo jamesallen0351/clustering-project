@@ -13,10 +13,11 @@ import env
 
 
 from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
 from sklearn.preprocessing import MinMaxScaler
 import sklearn.preprocessing
 import scipy.stats as stats
-
+from sklearn.cluster import KMeans
 
 def get_object_cols(df):
     '''
@@ -342,7 +343,7 @@ def get_zillow_heatmap(train):
 
 def get_zillow_scatter_bed(train):
     sns.set()
-    plt.figure(figsize=(10,14))
+    plt.figure(figsize=(8,12))
     scatter = sns.scatterplot(x='bedroomcnt', y='logerror', data=train, hue='logerror')
     plt.xlabel('Number of Bedrooms')
     plt.ylabel('Log Error')
@@ -352,11 +353,91 @@ def get_zillow_scatter_bed(train):
 
 def get_zillow_scatter_bath(train):
     sns.set()
-    plt.figure(figsize=(10,14))
+    plt.figure(figsize=(8,12))
     scatter = sns.scatterplot(x='bathroomcnt', y='logerror', data=train, hue='logerror')
     plt.xlabel('Number of Bathrooms')
     plt.ylabel('Log Error')
     plt.title('Number of Bathrooms and Log Error')
     
     return scatter    
+
+def create_cluster(df, X, k):
+    
+    scaler = StandardScaler(copy=True).fit(X)
+    X_scaled = pd.DataFrame(scaler.transform(X), columns=X.columns.values).set_index([X.index.values])
+    kmeans = KMeans(n_clusters = k, random_state = 42)
+    kmeans.fit(X_scaled)
+    kmeans.predict(X_scaled)
+    df['cluster'] = kmeans.predict(X_scaled)
+    df['cluster'] = 'cluster_' + df.cluster.astype(str)
+    centroids = pd.DataFrame(scaler.inverse_transform(kmeans.cluster_centers_), columns=X_scaled.columns)
+    return df, X_scaled, scaler, kmeans, centroids
+
+def create_clusters(train_scaled, validate_scaled, test_scaled):
+    '''
+    Function creates three clusters from scaled train - Tax, SQFT, Rooms
+    Fits KMeans to train, predicts on train, validate, test to create clusters for each.
+    Appends clusters to scaled data for modeling.
+    '''
+
+    # Tax Cluster
+    # Selecting Features
+    X_1 = train_scaled[['taxvaluedollarcnt', 'taxamount','taxrate']]
+    X_2 = validate_scaled[['taxvaluedollarcnt', 'taxamount','taxrate']]
+    X_3 = test_scaled[['taxvaluedollarcnt', 'taxamount','taxrate']]
+    # Creating Object
+    kmeans = KMeans(n_clusters=3)
+    # Fitting to Train Only
+    kmeans.fit(X_1)
+    # Predicting to add column to train
+    train_scaled['cluster_tax'] = kmeans.predict(X_1)
+    # Predicting to add column to validate
+    validate_scaled['cluster_tax'] = kmeans.predict(X_2)
+    # Predicting to add column to test
+    test_scaled['cluster_tax'] = kmeans.predict(X_3)
+
+    # SQFT Cluster
+    # Selecting Features
+    X_4 = train_scaled[['calculatedfinishedsquarefeet', 'lotsizesquarefeet']]
+    X_5 = validate_scaled[['calculatedfinishedsquarefeet', 'lotsizesquarefeet']]
+    X_6 = test_scaled[['calculatedfinishedsquarefeet', 'lotsizesquarefeet']]
+    # Creating Object
+    kmeans = KMeans(n_clusters=2)
+    # Fitting to Train Only
+    kmeans.fit(X_4)
+    # Predicting to add column to train
+    train_scaled['cluster_sqft'] = kmeans.predict(X_4)
+    # Predicting to add column to validate
+    validate_scaled['cluster_sqft'] = kmeans.predict(X_5)
+    # Predicting to add column to test
+    test_scaled['cluster_sqft'] = kmeans.predict(X_6)
+
+    # Rooms Cluster
+    # Selecting Features
+    X_7 = train_scaled[['bathroomcnt','bedroomcnt','age']]
+    X_8 = validate_scaled[['bathroomcnt','bedroomcnt','age']]
+    X_9 = test_scaled[['bathroomcnt','bedroomcnt','age']]
+    # Creating Object
+    kmeans = KMeans(n_clusters=3)
+    # Fitting to Train Only
+    kmeans.fit(X_7)
+    # Predicting to add column to train
+    train_scaled['cluster_rooms'] = kmeans.predict(X_7)
+    # Predicting to add column to validate
+    validate_scaled['cluster_rooms'] = kmeans.predict(X_8)
+    # Predicting to add column to test
+    test_scaled['cluster_rooms'] = kmeans.predict(X_9)
+
+    return train_scaled, validate_scaled, test_scaled
+
+def create_scatter_plot(x,y,df,kmeans, X_scaled, scaler):
+    
+    """ Takes in x and y (variable names as strings, along with returned objects from previous
+    function create_cluster and creates a plot"""
+    
+    plt.figure(figsize=(12, 8))
+    sns.scatterplot(x = x, y = y, data = df, hue = 'cluster')
+    centroids = pd.DataFrame(scaler.inverse_transform(kmeans.cluster_centers_), columns=X_scaled.columns)
+    centroids.plot.scatter(y=y, x= x, ax=plt.gca(), alpha=.30, s=500, c='blue')
+    
     
