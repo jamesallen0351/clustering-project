@@ -335,3 +335,16 @@ def summarize(df):
     print('nulls in dataframe by row: ')
     print(nulls_by_row(df))
     print('============================================')
+    
+    
+def get_zillow_heatmap(train):
+    '''
+    returns a heatmap and correlations of how each feature relates to logerror
+    '''
+    sns.set()
+    plt.figure(figsize=(10,14))
+    heatmap = sns.heatmap(train.corr()[['logerror']].sort_values(by='logerror', ascending=False), vmin=-.5, vmax=.5, annot=True)
+    heatmap.set_title('Correlation Features For Single Family Residential Properties')
+    
+    return heatmap
+
