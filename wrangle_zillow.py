@@ -438,6 +438,6 @@ def create_scatter_plot(x,y,df,kmeans, X_scaled, scaler):
     plt.figure(figsize=(12, 8))
     sns.scatterplot(x = x, y = y, data = df, hue = 'cluster')
     centroids = pd.DataFrame(scaler.inverse_transform(kmeans.cluster_centers_), columns=X_scaled.columns)
-    centroids.plot.scatter(y=y, x= x, ax=plt.gca(), alpha=.30, s=500, c='blue')
+    centroids.plot.scatter(y=y, x= x, ax=plt.gca(), alpha=.5, s=500, c='blue')
     
     
