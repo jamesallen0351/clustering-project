@@ -88,14 +88,6 @@ def clean_zillow(df):
 
     df.set_index('parcelid', inplace=True)
 
-    # cols_to_drop = ['fullbathcnt','heatingorsystemtypeid','finishedsquarefeet12', 
-    #             'propertycountylandusecode', 'propertylandusetypeid','propertyzoningdesc', 'censustractandblock',
-    #             'propertylandusedesc', 'buildingqualitytypeid' , 'unitcnt', 'heatingorsystemdesc', 
-    #             'lotsizesquarefeet','regionidcity', 'calculatedbathnbr', 'transactiondate', 'roomcnt', 'id', 'regionidcounty',
-    #             'regionidzip', 'assessmentyear']
-
-    # df.drop(columns=cols_to_drop, inplace = True)
-
     df.dropna(inplace = True)
 
     get_latitude(df)
