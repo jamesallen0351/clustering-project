@@ -340,3 +340,23 @@ def get_zillow_heatmap(train):
     
     return heatmap
 
+def get_zillow_scatter_bed(train):
+    sns.set()
+    plt.figure(figsize=(10,14))
+    scatter = sns.scatterplot(x='bedroomcnt', y='logerror', data=train, hue='logerror')
+    plt.xlabel('Number of Bedrooms')
+    plt.ylabel('Log Error')
+    plt.title('Number of Bedrooms and Log Error')
+    
+    return scatter
+
+def get_zillow_scatter_bath(train):
+    sns.set()
+    plt.figure(figsize=(10,14))
+    scatter = sns.scatterplot(x='bathroomcnt', y='logerror', data=train, hue='logerror')
+    plt.xlabel('Number of Bathrooms')
+    plt.ylabel('Log Error')
+    plt.title('Number of Bathrooms and Log Error')
+    
+    return scatter    
+    
