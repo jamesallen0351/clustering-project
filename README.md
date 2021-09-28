@@ -6,12 +6,24 @@
 
 ## Executive Summary
 
-- This is where I will write my executive summary
+### Zillow Single Unit Properties
 
-### Counties and Tax %:
-- Los Angeles: 1.38 %
-- Orange: 1.21 %
-- Ventura: 1.19%
+- Goal:
+    - Identify drivers of error in Zestimates (logerror)
+    
+- Takeaways / Key Findings:
+    - Not a large amount of information found in clustering
+    - Baseline and Models similar performance
+    - No significant identified drivers of logerror
+    
+- Recommendations
+    - Further exploration of clustering and adjusting features
+    - Use Individual counties to explore and model data
+
+### Counties:
+- Los Angeles
+- Orange
+- Ventura
 
 ## Project Overview
 
@@ -62,14 +74,14 @@
 | Column Name                  | Renamed   | Info                                            |
 |------------------------------|-----------|-------------------------------------------------|
 | parcelid                     | N/A       | ID of the property (unique)                     |
-| bathroomcnt                  | baths     | number of bathrooms                             |
-| bedroomcnt                   | beds      | number of bedrooms                              |
-| calculatedfinishedsquarefeet | sqft      | number of square feet                           |
+| bathroomcnt                  | N/A       | number of bathrooms                             |
+| bedroomcnt                   | N/A       | number of bedrooms                              |
+| calculatedfinishedsquarefeet | N/A       | number of square feet                           |
 | fips                         | N/A       | FIPS code (for county)                          |
 | propertylandusetypeid        | N/A       | Type of property                                |
 | yearbuilt                    | N/A       | The year the property was built                 |
-| taxvaluedollarcnt            | tax_value | Property's tax value in dollars                 |
-| taxamount                    | tax_amount| amount of tax on property                       |
+| taxvaluedollarcnt            | N/A       | Property's tax value in dollars                 |
+| taxamount                    | N/A       | amount of tax on property                       |
 | tax_rate                     | N/A       | tax_rate on property                            |
 
 
@@ -84,7 +96,7 @@
 
 - Prepare
     - Goal: leave this section with a dataset that is split into train, validate, and test ready to be analyzed. Make sure data types are appropriate and missing values have been addressed, as have any data integrity issues.
-    - Create a prep.pyfile as the reproducible component that handles missing values, fixes data integrity issues, changes data types, scales data, etc.
+    - Create a wrangle.py file as the reproducible component that handles missing values, fixes data integrity issues, changes data types, scales data, etc.
 
 - Data Exploration
     - Goal: The findings from your analysis should provide you with answers to the specific questions your customer asked that will be used in your final report as well as information to move forward toward building a model.
@@ -102,22 +114,36 @@
 
 ## Key Findings and Takeaways
 
-- This is where I will write my key findings and takeaways
+- Not a large variation from baseline on all models, I went with polynomial regression to test data
 
-- Counties and Tax include:
-    - Los Angeles : 1.38 %
-    - Orange : 1.21 %
-    - Ventura : 1.19 %
+- Polynomial linear regression was close to baseline on train, but did a little better on validate / test
+
+- Selecting features helped performance on models
+
+- Would like to further adjust features to compare performance on models
+
+
+## Conclusion
+
+- Used number of bathrooms, number of bedrooms, and square feet to help with hypothesis and visuals
+
+- Rejected null hypothesis
+
+- Clusters helped map out property location but had little significance for logerror
+
+- Training models were similar to baseline but using feature helped models perform
+
+- Validate and test did slightly better than baseline 
 
 ## Next steps
 
 - With more time I would like to:
 
-    - a. 
+    - a. Explore into clustering more and adjust features / feature engineering
     
-    - b. 
+    - b. Run additional models with adjusted features and degrees
     
-    - c. 
+    - c. Use individual counties to explore and model data
 
 ## To Recreate my project
 
